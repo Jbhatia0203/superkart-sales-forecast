@@ -1,3 +1,4 @@
+%%writefile mlops/model-building/prep.py
 # data manipulation: work with series and dataframes
 import pandas as pd
 # split data into train and test sets
@@ -65,7 +66,7 @@ preprocessor = ColumnTransformer(
 )
 
 # Save to joblib after preprocessing
-joblib.dump(preprocessor, "/content/superkart-sales-forecast/model-building/preprocessor.joblib")
+joblib.dump(preprocessor, "mlops/model-building/preprocessor.joblib")
 
 # fit and transform preprocessor on the training set
 X_train_transformed = preprocessor.fit_transform(X_train)
@@ -99,7 +100,7 @@ api.create_repo(repo_id=repo_id,
 
 # upload preprocessor joblib to hf space
 api.upload_file(
-    path_or_fileobj="/content/mlops/model-building/preprocessor.joblib",   # local file path
+    path_or_fileobj="mlops/model-building/preprocessor.joblib",   # local file path
     path_in_repo="preprocessor.joblib",      # path inside repo
     repo_id=repo_id,
     repo_type=repo_type)
