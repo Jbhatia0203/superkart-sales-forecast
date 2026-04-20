@@ -2,6 +2,8 @@
 import pandas as pd
 # for numerical and scientific computations
 import numpy as np
+# download preprocessor or other model files
+from huggingface_hub import hf_hub_download
 # load the serialized joblib file as a python object
 import joblib
 # regression model metrics
@@ -13,7 +15,16 @@ from sklearn.model_selection import RandomizedSearchCV
 from huggingface_hub import hf_hub_download
 
 # load the preprocessor joblib
-preprocessor = joblib.load("mlops/model-building/preprocessor.joblib")
+# PREPROCESSOR_PATH = "hf://JaiBhatia020373/mlops/blob/main/preprocessor.joblib"
+
+# Download the file from your repo
+model_path = hf_hub_download(
+    repo_id="JaiBhatia020373/mlops",   # replace with your repo
+    repo_type="model",
+    filename="preprocessor.joblib"       # the file you uploaded
+)
+preprocessor = joblib.load(model_path)
+print("Preprocessor loaded successfully")
 
 repo_id = "JaiBhatia020373/mlops"
 repo_type = "dataset"
