@@ -1,3 +1,4 @@
+%%writefile mlops/model-building/train.py
 # work with series and data frames for data manipulation
 import pandas as pd
 # for numerical and scientific computations
@@ -13,7 +14,7 @@ from sklearn.model_selection import RandomizedSearchCV
 from huggingface_hub import hf_hub_download
 
 # load the preprocessor joblib
-preprocessor = joblib.load("/content/mlops/model-building/preprocessor.joblib")
+preprocessor = joblib.load("mlops/model-building/preprocessor.joblib")
 
 repo_id = "JaiBhatia020373/mlops"
 repo_type = "dataset"
@@ -96,11 +97,11 @@ api.create_repo(repo_id=repo_id,
 )
 
 # create joblib file for best estimator model
-joblib.dump(best_sales_forecast_model, "/content/mlops/model-building/sales-forecast.joblib")
+joblib.dump(best_sales_forecast_model, "mlops/model-building/sales-forecast.joblib")
 
 # upload joblib file for best estimator model to hf space
 api.upload_file(
-    path_or_fileobj="/content/mlops/model-building/sales-forecast.joblib",   # local file path
+    path_or_fileobj="mlops/model-building/sales-forecast.joblib",   # local file path
     path_in_repo="sales-forecast.joblib",      # path inside repo
     repo_id=repo_id,
     repo_type=repo_type)
