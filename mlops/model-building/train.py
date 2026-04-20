@@ -1,4 +1,3 @@
-%%writefile mlops/model-building/train.py
 # work with series and data frames for data manipulation
 import pandas as pd
 # for numerical and scientific computations
