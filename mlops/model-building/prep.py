@@ -1,4 +1,3 @@
-%%writefile mlops/model-building/prep.py
 # data manipulation: work with series and dataframes
 import pandas as pd
 # split data into train and test sets
