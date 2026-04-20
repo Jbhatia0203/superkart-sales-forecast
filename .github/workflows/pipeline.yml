@@ -7,9 +7,9 @@ jobs:
   register-dataset:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: pip install -r mlops/requirements.txt
+        run: pip install -r requirements.txt
       - name: Login to Hugging Face Hub
         run: huggingface-cli login --token ${{ secrets.HF_TOKEN }}
       - name: Upload Dataset to Hugging Face Hub
@@ -21,9 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: register-dataset
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: pip install -r mlops/requirements.txt
+        run: pip install -r requirements.txt
       - name: Run Data Preprocessing and Preparation
         env: 
           HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -33,9 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: prep
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: pip install -r mlops/requirements.txt
+        run: pip install -r requirements.txt
       - name: Model Building
         env:
           HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -45,9 +45,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [train, prep, register-dataset]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: pip install -r mlops/requirements.txt
+        run: pip install -r requirements.txt
       - name: Push files to frontend Hugging Face Space
         env:
           HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
