@@ -10,9 +10,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install Dependencies
         run: pip install -r mlops/requirements.txt
+      - name: Login to Hugging Face Hub
+        run: huggingface-cli login --token ${{ secrets.HF_TOKEN }}
       - name: Upload Dataset to Hugging Face Hub
         env: 
-          HUGGING_FACE_TOKEN: ${{ secrets.HF_TOKEN }}
+          HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python mlops/model-building/data-register.py
 
   prep:
@@ -24,7 +26,7 @@ jobs:
         run: pip install -r mlops/requirements.txt
       - name: Run Data Preprocessing and Preparation
         env: 
-          HUGGING_FACE_TOKEN: ${{ secrets.HF_TOKEN }}
+          HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python mlops/model-building/prep.py
 
   train:
@@ -36,7 +38,7 @@ jobs:
         run: pip install -r mlops/requirements.txt
       - name: Model Building
         env:
-          HUGGING_FACE_TOKEN: ${{ secrets.HF_TOKEN }}
+          HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python mlops/model-building/train.py
 
   deploy-hosting:
@@ -48,5 +50,5 @@ jobs:
         run: pip install -r mlops/requirements.txt
       - name: Push files to frontend Hugging Face Space
         env:
-          HUGGING_FACE_TOKEN: ${{ secrets.HF_TOKEN }}
+          HUGGING_FACE_HUB_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python mlops/hosting/hosting.py
