@@ -1,3 +1,4 @@
+%%writefile mlops/deployment/app.py
 import streamlit as st
 import pandas as pd
 import re
@@ -20,21 +21,21 @@ st.title("SuperKart Sales Forecast Prediction")
 # define a dictionary of product weights, organized by product_types and products
 # all weights are in kg
 product_weights = {
-    "Meat": {"Chicken": "12", "Mutton": "15"},
-    "Snack foods": {"Potato chips": "15", "Chocolate bar": "0.05"},
+    "Meat": {"Chicken": "12.0", "Mutton": "15.0"},
+    "Snack foods": {"Potato chips": "15.0", "Chocolate bar": "0.05"},
     "Hard drinks": {"Whiskey": "0.7", "Vodka": "0.7"},
-    "Dairy": {"Milk": "15", "Cheese": "9"},
-    "Canned": {"Canned beans": "8", "Canned tuna": "15"},
-    "Soft drinks": {"Cola": "18", "Lemon soda": "7"},
-    "Health and hygiene": {"Soap": "9.5", "Toothpaste": "16"},
-    "Baking goods": {"Flour": "20", "Baking powder": "2"},
+    "Dairy": {"Milk": "15.0", "Cheese": "9.0"},
+    "Canned": {"Canned beans": "8.0", "Canned tuna": "15.0"},
+    "Soft drinks": {"Cola": "18.0", "Lemon soda": "7.0"},
+    "Health and hygiene": {"Soap": "9.5", "Toothpaste": "16.0"},
+    "Baking goods": {"Flour": "20.0", "Baking powder": "2.0"},
     "Bread": {"White bread": "0.4", "Whole wheat bread": "0.5"},
-    "Breakfast": {"Cornflakes": "9", "Oats": "16"},
+    "Breakfast": {"Cornflakes": "9.0", "Oats": "16.0"},
     "Frozen foods": {"Frozen peas": "0.5", "Ice cream": "0.5"},
-    "Fruits and vegetables": {"Apple": "15", "Tomato": "9"},
-    "Household": {"Detergent": "15", "Dishwashing liquid": "8"},
+    "Fruits and vegetables": {"Apple": "15.0", "Tomato": "9.0"},
+    "Household": {"Detergent": "15.0", "Dishwashing liquid": "8.0"},
     "Seafood": {"Prawns": "0.25", "Salmon": "0.2"},
-    "Starchy foods": {"Rice": "15", "Pasta": "8"},
+    "Starchy foods": {"Rice": "15.0", "Pasta": "8.0"},
     "Others": {"Batteries": "0.1", "Stationary": "0.2"}
 }
 
