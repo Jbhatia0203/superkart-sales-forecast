@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import re
-from datetime import date
+from datetime import datetime
 from huggingface_hub import hf_hub_download
 import joblib
 
@@ -177,6 +177,13 @@ prod_sugar_cont = st.selectbox("Product sugar content", sugar_options, index=sel
 store_establishment_year = st.number_input("Enter 4-digit store establishment year", 
                                            min_value=1970, step=1)
 
+# compute the age of store and add the 'Age_Of_Store' column
+current_year = datetime.now().year
+# dataset_trans['Age_of_Store'] 
+store_age = current_year - store_establishment_year
+# dataset_trans['Store_Establishment_Year']
+
+
 # store type - selection also determines the store size that will be needed
 store_type_size_map = {"Departmental Store" : "Medium", "Food Mart" : "Small",
                        "Supermarket Type1" : "High", "Supermarket Type2" : "Medium"}
@@ -245,26 +252,27 @@ def Validate_inputs():
 # predict button click
 if st.button("Predict"):
   if Validate_inputs():
+
     # prepare input data for POST request
     input_data = pd.DataFrame({
     "Product_Id": product_id,
-    "Product_Weight": product_weight,
+    "Product_Weight": float(product_weight),
     "Product_Sugar_Content": product_sugar_cont,
-    "Product_Allocated_Area": product_allocated_area,
+    "Product_Allocated_Area": float(product_allocated_area),
     "Product_Type": product_type,
-    "Product_MRP": product_MRP_price,
+    "Product_MRP": float(product_MRP_price),
     "Store_Id": store_id,
-    "Store_Establishment_Year": store_establishment_year,
     "Store_Size": store_size,
     "Store_Location_City_Type": store_city_type,
     "Store_Type": store_type
+    "Age_of_Store": int(store_age)
 }, index=[0])
     
     st.write("Input data is:\n", input_data)
     
     # apply preprocessing function thru proprocessor joblib
     input_data_processed = preprocessor.transform(input_data)
-    
+
     prediction = model.predict(input_data_processed)
     st.write("Sales Forecast is:\n", prediction)
   else:
