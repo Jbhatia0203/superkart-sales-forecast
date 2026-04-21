@@ -138,7 +138,7 @@ product = st.selectbox("Select product", list(products.keys()))
 product_weight = products[product]
 
 # product weight text populated from selected product
-product_wt = st.text_input("Enter product weight in kg", value=product_weight, format="%.2f")
+product_wt = st.number_input("Enter product weight as numeric value in kg", value=product_weight, format="%.2f")
 
 # product ID populated from selected product
 product_id = product_codes[product]
