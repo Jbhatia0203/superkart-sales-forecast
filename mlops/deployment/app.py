@@ -197,7 +197,6 @@ store_city_type = st.selectbox("Select store location city type", ["Tier 1", "Ti
 product_allocated_area = st.number_input("Product Allocated Area Ratio between 0 and 0.3", 
                                          min_value=0.004, max_value=0.3, step=0.001, format="%.3f")
 
-st.button("Predict", key="predict_button")
 
 def Validate_inputs():
   # validate inputs
