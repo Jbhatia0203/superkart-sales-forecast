@@ -251,7 +251,7 @@ if st.button("Predict"):
     "Store_Size": store_size,
     "Store_Location_City_Type": store_city_type,
     "Store_Type": store_type
-})
+}, index=[0])
     st.write("Request payload is:\n", input_data)
     
     prediction = model.predict(input_data)
