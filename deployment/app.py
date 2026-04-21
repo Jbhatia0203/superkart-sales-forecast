@@ -1,3 +1,4 @@
+%%writefile mlops/deployment/app.py
 import streamlit as st
 import pandas as pd
 import re
@@ -15,26 +16,32 @@ model_path = hf_hub_download(repo_id="JaiBhatia020373/mlops",
 
 model = joblib.load(model_path)
 
+preprocessor_path = hf_hub_download(repo_id="JaiBhatia020373/mlops", 
+                             filename="preprocessor.joblib", 
+                             repo_type="model")
+
+preprocessor = joblib.load(preprocessor_path)
+
 st.title("SuperKart Sales Forecast Prediction")
 
 # define a dictionary of product weights, organized by product_types and products
 # all weights are in kg
 product_weights = {
-    "Meat": {"Chicken": "12", "Mutton": "15"},
-    "Snack foods": {"Potato chips": "15", "Chocolate bar": "0.05"},
+    "Meat": {"Chicken": "12.0", "Mutton": "15.0"},
+    "Snack foods": {"Potato chips": "15.0", "Chocolate bar": "0.05"},
     "Hard drinks": {"Whiskey": "0.7", "Vodka": "0.7"},
-    "Dairy": {"Milk": "15", "Cheese": "9"},
-    "Canned": {"Canned beans": "8", "Canned tuna": "15"},
-    "Soft drinks": {"Cola": "18", "Lemon soda": "7"},
-    "Health and hygiene": {"Soap": "9.5", "Toothpaste": "16"},
-    "Baking goods": {"Flour": "20", "Baking powder": "2"},
+    "Dairy": {"Milk": "15.0", "Cheese": "9.0"},
+    "Canned": {"Canned beans": "8.0", "Canned tuna": "15.0"},
+    "Soft drinks": {"Cola": "18.0", "Lemon soda": "7.0"},
+    "Health and hygiene": {"Soap": "9.5", "Toothpaste": "16.0"},
+    "Baking goods": {"Flour": "20.0", "Baking powder": "2.0"},
     "Bread": {"White bread": "0.4", "Whole wheat bread": "0.5"},
-    "Breakfast": {"Cornflakes": "9", "Oats": "16"},
+    "Breakfast": {"Cornflakes": "9.0", "Oats": "16.0"},
     "Frozen foods": {"Frozen peas": "0.5", "Ice cream": "0.5"},
-    "Fruits and vegetables": {"Apple": "15", "Tomato": "9"},
-    "Household": {"Detergent": "15", "Dishwashing liquid": "8"},
+    "Fruits and vegetables": {"Apple": "15.0", "Tomato": "9.0"},
+    "Household": {"Detergent": "15.0", "Dishwashing liquid": "8.0"},
     "Seafood": {"Prawns": "0.25", "Salmon": "0.2"},
-    "Starchy foods": {"Rice": "15", "Pasta": "8"},
+    "Starchy foods": {"Rice": "15.0", "Pasta": "8.0"},
     "Others": {"Batteries": "0.1", "Stationary": "0.2"}
 }
 
@@ -93,38 +100,38 @@ product_codes = {
 }
 
 product_MRP_prices = {
-    "Chicken": 120.5,
-    "Mutton": 210.3,
-    "Potato chips": 10,
-    "Chocolate bar": 20,
-    "Whiskey": 670,
-    "Vodka": 400,
-    "Milk": 60,
-    "Cheese": 150,
-    "Canned beans": 30,
-    "Canned tuna": 70,
-    "Cola": 30,
-    "Lemon soda": 30,
-    "Soap": 40,
-    "Toothpaste": 60,
-    "Flour": 100,
-    "Baking powder": 30,
-    "White bread": 40,
-    "Whole wheat bread": 50,
-    "Cornflakes": 100,
-    "Oats": 100,
-    "Frozen peas": 100,
-    "Ice cream": 100,
-    "Apple": 120,
-    "Tomato": 70,
-    "Detergent": 100,
-    "Dishwashing liquid": 100,
-    "Prawns": 130,
-    "Salmon": 170,
-    "Rice": 80,
-    "Pasta": 100,
-    "Batteries": 40,
-    "Stationary": 30
+    "Chicken": "120.5",
+    "Mutton": "210.3",
+    "Potato chips": "10.0",
+    "Chocolate bar": "20.0",
+    "Whiskey": "670.0",
+    "Vodka": "400.0",
+    "Milk": "60.0",
+    "Cheese": "150.0",
+    "Canned beans": "30.0",
+    "Canned tuna": "70.0",
+    "Cola": "30.0",
+    "Lemon soda": "30.0",
+    "Soap": "40.0",
+    "Toothpaste": "60.0",
+    "Flour": "100.0",
+    "Baking powder": "30.0",
+    "White bread": "40.0",
+    "Whole wheat bread": "50.0",
+    "Cornflakes": "100.0",
+    "Oats": "100.0",
+    "Frozen peas": "100.0",
+    "Ice cream": "100.0",
+    "Apple": "120.0",
+    "Tomato": "70.0",
+    "Detergent": "100.0",
+    "Dishwashing liquid": "100.0",
+    "Prawns": "130.0",
+    "Salmon": "170.0",
+    "Rice": "80.0",
+    "Pasta": "100.0",
+    "Batteries": "40.0",
+    "Stationary": "30.0"
 }
 
 # select product type
@@ -138,7 +145,9 @@ product = st.selectbox("Select product", list(products.keys()))
 product_weight = products[product]
 
 # product weight text populated from selected product
-product_wt = st.text_input("Enter product weight in kg", value=product_weight, format="%.2f")
+product_wt = st.number_input("Enter product weight as numeric value in kg", 
+                             value=float(product_weight), min_value=0.0, 
+                             max_value=1000.0, step=0.01, format="%.2f")
 
 # product ID populated from selected product
 product_id = product_codes[product]
@@ -146,10 +155,12 @@ product_id = product_codes[product]
 prod_id = st.text_input("Product ID", product_id)
 
 # product MRP price populated from selected product
-product_MRP_price = int(product_MRP_prices[product])
+product_MRP_price = product_MRP_prices[product]
 
-prod_MRP_price = st.number_input("Product MRP per kg", value=product_MRP_price,
-                                 format=".2f")
+prod_MRP_price = st.number_input("Product MRP per kg", 
+                                 value=float(product_MRP_price),
+                                 min_value=0.0, max_value=1000.0, step=0.01,
+                                 format="%.2f")
 
 # list of sugar content options
 sugar_options = ["No Sugar", "Low Sugar", "Regular"]
@@ -165,7 +176,7 @@ prod_sugar_cont = st.selectbox("Product sugar content", sugar_options, index=sel
 
 # store establishment year
 store_establishment_year = st.number_input("Enter 4-digit store establishment year", 
-                                           min_value=1970, min_chars=4, max_chars=4)
+                                           min_value=1970, step=1)
 
 # store type - selection also determines the store size that will be needed
 store_type_size_map = {"Departmental Store" : "Medium", "Food Mart" : "Small",
@@ -194,7 +205,6 @@ store_city_type = st.selectbox("Select store location city type", ["Tier 1", "Ti
 product_allocated_area = st.number_input("Product Allocated Area Ratio between 0 and 0.3", 
                                          min_value=0.004, max_value=0.3, step=0.001, format="%.3f")
 
-st.button("Predict", key="predict_button")
 
 def Validate_inputs():
   # validate inputs
@@ -249,10 +259,14 @@ if st.button("Predict"):
     "Store_Size": store_size,
     "Store_Location_City_Type": store_city_type,
     "Store_Type": store_type
-})
-    st.write("Request payload is:\n", input_data)
+}, index=[0])
     
-    prediction = model.predict(input_data)
+    st.write("Input data is:\n", input_data)
+    
+    # apply preprocessing function thru proprocessor joblib
+    input_data_processed = preprocessor.transform(input_data)
+    
+    prediction = model.predict(input_data_processed)
     st.write("Sales Forecast is:\n", prediction)
   else:
     st.write("Invalid inputs: pls correct error")
