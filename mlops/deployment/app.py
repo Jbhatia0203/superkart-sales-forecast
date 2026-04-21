@@ -152,7 +152,7 @@ product_MRP_price = product_MRP_prices[product]
 
 prod_MRP_price = st.number_input("Product MRP per kg", value=float(product_MRP_price),
                                  min_value=0.0, max_value=1000.0, step=0.01,
-                                 format=".2f")
+                                 format="%.2f")
 
 # list of sugar content options
 sugar_options = ["No Sugar", "Low Sugar", "Regular"]
