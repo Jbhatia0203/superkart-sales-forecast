@@ -15,6 +15,12 @@ model_path = hf_hub_download(repo_id="JaiBhatia020373/mlops",
 
 model = joblib.load(model_path)
 
+preprocessor_path = hf_hub_download(repo_id="JaiBhatia020373/mlops", 
+                             filename="preprocessor.joblib", 
+                             repo_type="model")
+
+preprocessor = joblib.load(preprocessor_path)
+
 st.title("SuperKart Sales Forecast Prediction")
 
 # define a dictionary of product weights, organized by product_types and products
@@ -150,7 +156,8 @@ prod_id = st.text_input("Product ID", product_id)
 # product MRP price populated from selected product
 product_MRP_price = product_MRP_prices[product]
 
-prod_MRP_price = st.number_input("Product MRP per kg", value=float(product_MRP_price),
+prod_MRP_price = st.number_input("Product MRP per kg", 
+                                 value=float(product_MRP_price),
                                  min_value=0.0, max_value=1000.0, step=0.01,
                                  format="%.2f")
 
@@ -252,9 +259,13 @@ if st.button("Predict"):
     "Store_Location_City_Type": store_city_type,
     "Store_Type": store_type
 }, index=[0])
-    st.write("Request payload is:\n", input_data)
     
-    prediction = model.predict(input_data)
+    st.write("Input data is:\n", input_data)
+    
+    # apply preprocessing function thru proprocessor joblib
+    input_data_processed = preprocessor.transform(input_data)
+    
+    prediction = model.predict(input_data_processed)
     st.write("Sales Forecast is:\n", prediction)
   else:
     st.write("Invalid inputs: pls correct error")
