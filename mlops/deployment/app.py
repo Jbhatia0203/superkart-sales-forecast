@@ -95,36 +95,36 @@ product_codes = {
 product_MRP_prices = {
     "Chicken": 120.5,
     "Mutton": 210.3,
-    "Potato chips": 10,
-    "Chocolate bar": 20,
-    "Whiskey": 670,
-    "Vodka": 400,
-    "Milk": 60,
-    "Cheese": 150,
-    "Canned beans": 30,
-    "Canned tuna": 70,
-    "Cola": 30,
-    "Lemon soda": 30,
-    "Soap": 40,
-    "Toothpaste": 60,
-    "Flour": 100,
-    "Baking powder": 30,
-    "White bread": 40,
-    "Whole wheat bread": 50,
-    "Cornflakes": 100,
-    "Oats": 100,
-    "Frozen peas": 100,
-    "Ice cream": 100,
-    "Apple": 120,
-    "Tomato": 70,
-    "Detergent": 100,
-    "Dishwashing liquid": 100,
-    "Prawns": 130,
-    "Salmon": 170,
-    "Rice": 80,
-    "Pasta": 100,
-    "Batteries": 40,
-    "Stationary": 30
+    "Potato chips": 10.0,
+    "Chocolate bar": 20.0,
+    "Whiskey": 670.0,
+    "Vodka": 400.0,
+    "Milk": 60.0,
+    "Cheese": 150.0,
+    "Canned beans": 30.0,
+    "Canned tuna": 70.0,
+    "Cola": 30.0,
+    "Lemon soda": 30.0,
+    "Soap": 40.0,
+    "Toothpaste": 60.0,
+    "Flour": 100.0,
+    "Baking powder": 30.0,
+    "White bread": 40.0,
+    "Whole wheat bread": 50.0,
+    "Cornflakes": 100.0,
+    "Oats": 100.0,
+    "Frozen peas": 100.0,
+    "Ice cream": 100.0,
+    "Apple": 120.0,
+    "Tomato": 70.0,
+    "Detergent": 100.0,
+    "Dishwashing liquid": 100.0,
+    "Prawns": 130.0,
+    "Salmon": 170.0,
+    "Rice": 80.0,
+    "Pasta": 100.0,
+    "Batteries": 40.0,
+    "Stationary": 30.0
 }
 
 # select product type
@@ -138,7 +138,9 @@ product = st.selectbox("Select product", list(products.keys()))
 product_weight = products[product]
 
 # product weight text populated from selected product
-product_wt = st.number_input("Enter product weight as numeric value in kg", value=product_weight, format="%.2f")
+product_wt = st.number_input("Enter product weight as numeric value in kg", 
+                             value=float(product_weight), min_value=0.0, 
+                             max_value=1000.0, step=0.01, format="%.2f")
 
 # product ID populated from selected product
 product_id = product_codes[product]
@@ -146,9 +148,10 @@ product_id = product_codes[product]
 prod_id = st.text_input("Product ID", product_id)
 
 # product MRP price populated from selected product
-product_MRP_price = int(product_MRP_prices[product])
+product_MRP_price = float(product_MRP_prices[product])
 
-prod_MRP_price = st.number_input("Product MRP per kg", value=product_MRP_price,
+prod_MRP_price = st.number_input("Product MRP per kg", value=float(product_MRP_price),
+                                 min_value=0.0, max_value=1000.0, step=0.01,
                                  format=".2f")
 
 # list of sugar content options
@@ -165,7 +168,7 @@ prod_sugar_cont = st.selectbox("Product sugar content", sugar_options, index=sel
 
 # store establishment year
 store_establishment_year = st.number_input("Enter 4-digit store establishment year", 
-                                           min_value=1970, min_chars=4, max_chars=4)
+                                           min_value=1970, step=1)
 
 # store type - selection also determines the store size that will be needed
 store_type_size_map = {"Departmental Store" : "Medium", "Food Mart" : "Small",
