@@ -64,14 +64,14 @@ preprocessor = ColumnTransformer(
     ]
 )
 
-# Save to joblib after preprocessing
-joblib.dump(preprocessor, "mlops/model-building/preprocessor.joblib")
-
 # fit and transform preprocessor on the training set
 X_train_transformed = preprocessor.fit_transform(X_train)
 
 # after preprocessor trained on train set then transform on the test set
 X_test_transformed = preprocessor.transform(X_test)
+
+# Save to joblib after preprocessing
+joblib.dump(preprocessor, "mlops/model-building/preprocessor.joblib")
 
 # get feature names list
 feature_names = preprocessor.get_feature_names_out()
