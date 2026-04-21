@@ -264,7 +264,7 @@ if st.button("Predict"):
     "Store_Id": store_id,
     "Store_Size": store_size,
     "Store_Location_City_Type": store_city_type,
-    "Store_Type": store_type
+    "Store_Type": store_type,
     "Age_of_Store": int(store_age)
 }, index=[0])
     
